@@ -1,5 +1,8 @@
 # Security_by_Design
 
+
+Vous trouverez ci-joint le rapport du projet au format PDF ainsi qu’un fichier readme.txt contenant les informations essentielles sur l’installation, l’utilisation et les fonctionnalités du projet. Le rapport détaille les objectifs, la méthodologie, les résultats obtenus et les perspectives d’amélioration. Le fichier readme.txt sert de guide rapide pour comprendre et exploiter efficacement le projet.
+
 # 📬 Formulaire de Contact Sécurisé
 
 Projet local de formulaire de contact sécurisé, intégrant une authentification utilisateur, Google reCAPTCHA, sessions sécurisées et protection contre les vulnérabilités courantes (XSS, injections SQL, robots).
