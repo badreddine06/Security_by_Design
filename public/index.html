@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <h1>Formulaire de Connexion</h1>
+
+  <form id="loginForm">
+    <label>Nom d'utilisateur :
+      <input type="text" name="username" required />
+    </label><br><br>
+    
+    <label>Mot de passe :
+      <input type="password" name="password" required />
+    </label><br><br>
+
+    <div class="g-recaptcha" data-sitekey="6LcakjYrAAAAAEjLYeKn8-_CZdHhV9E4p0ko1vq8"></div><br>
+
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <p id="message" style="color: red;"></p>
+
+  <script>
+    const form = document.getElementById("loginForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const captcha = grecaptcha.getResponse();
+      if (!captcha) {
+        document.getElementById("message").innerText = "Veuillez valider le reCAPTCHA.";
+        return;
+      }
+
+      const data = {
+        username: form.username.value,
+        password: form.password.value,
+        "g-recaptcha-response": captcha
+      };
+
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+
+        if (res.ok && result.success) {
+          window.location.href = result.redirect || "/dashboard";
+        } else {
+          document.getElementById("message").innerText = result.error || "Erreur de connexion.";
+          grecaptcha.reset(); // réinitialise le captcha
+        }
+      } catch (error) {
+        document.getElementById("message").innerText = "Erreur réseau. Réessayez.";
+      }
+    });
+  </script>
+</body>
+</html>

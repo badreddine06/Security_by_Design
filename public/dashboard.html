@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulaire avec reCAPTCHA</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <h1>Formulaire sécurisé</h1>
+
+  <form id="contact-form">
+    <label>Nom: <input type="text" name="nom" required></label><br>
+    <label>Email: <input type="email" name="email" required></label><br>
+    <label>Message: <textarea name="message" required></textarea></label><br>
+
+    <div class="g-recaptcha" data-sitekey="6LcakjYrAAAAAEjLYeKn8-_CZdHhV9E4p0ko1vq8"></div><br>
+
+    <button type="submit">Envoyer</button>
+  </form>
+
+  <!-- Formulaire de déconnexion séparé -->
+  <form action="/logout" method="POST" style="margin-top: 20px;">
+    <button type="submit">Se déconnecter</button>
+  </form>
+  
+
+
+  <script>
+    document.querySelector("#contact-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = new URLSearchParams(formData);
+
+      try {
+        const response = await fetch("/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: data.toString(),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert(result.success); // ✅ POP-UP succès
+          form.reset();
+          grecaptcha.reset(); // Réinitialise reCAPTCHA
+        } else {
+          alert(result.error); // ❌ POP-UP erreur
+        }
+      } catch (error) {
+        console.error("Erreur :", error);
+        alert("Une erreur s'est produite. Veuillez réessayer.");
+      }
+    });
+  </script>
+</body>
+</html>
